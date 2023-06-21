@@ -1,3 +1,23 @@
+# Issues Faced
+
+1) When pip install, cupy does not get installed due to dependency conflicts
+   -  separately download cupy using pip that is suitable for the current computer's cuda. Refer to https://docs.cupy.dev/en/stable/install.html
+2) When running evaluation code for KITTI, it was unable to find evaluater_base.py
+   - add in:
+   ```
+   import sys
+   sys.path.append('evaluator')
+   ```
+3) Then it is unable to run cupy as cupy does not have attribute util under /Network/PWC/correlation.py:
+   - change `@cupy.util.memoize` to `@cupy.memoize`
+
+# Running
+To run everything in a single command, where the first argument selects the dataset, second argument selects the sequence and the third argument specifies the experiment name:
+```
+./run_oxford.sh oxford 10-29 original
+```
+Additional information could be found in the Tartanvo_Running_Datasets_instructions.md file
+
 # TartanVO: A Generalizable Learning-based VO
 
 TartanVO is a learning-based visual odometry trained on [TartanAir](https://theairlab.org/tartanair-dataset) dataset. It generalizes to multiple datasets and real-world scenarios, and outperforms geometry-based methods in challenging scenes. You can check the [python3](https://github.com/castacks/tartanvo/tree/python3) branch if you are using python3.  
@@ -15,25 +35,6 @@ Our model is trained purely on simulation data, but it generalizes well to real-
 ![KITTI10](results/kitti_10_tartanvo_1914.png)  ![EUROC_V102](results/euroc_v102_tartanvo_1914.png)
 
 
-## Setting up the environment in the docker
-We provide a prebuilt [docker image](https://hub.docker.com/repository/docker/amigoshan/tartanvo) and a [dockerfile](docker/tartanvo_ros.dockerfile), which allow you to replicate our setup. The docker image contains everything we need for testing this repo, including cuda, pytorch, cupy, opencv, ROS-melodic and etc. Here are the steps to build the docker image. 
-
-1. Install docker and nvidia-docker. You can find online tutorials like [this](https://cnvrg.io/how-to-setup-docker-and-nvidia-docker-2-0-on-ubuntu-18-04/).
-2. Run the docker image and mount the repository into the container, the following commands will automatically download the docker image. 
-```
-$ git clone https://github.com/castacks/tartanvo.git
-$ cd tartanvo
-$ nvidia-docker run -it --rm --network host --ipc=host -v $PWD:/tartanvo amigoshan/tartanvo:latest
-$ cd tartanvo
-```
-3. Now it's all set. Continuing the following steps inside the container.
-
-The above docker image is built on a ubuntu machine with nvidia driver 440.100. Alternatively, you can also build the docker image from the dockerfile we provided:
-```
-$ cd docker 
-$ docker build -t tartanvo -f tartanvo_ros.dockerfile .
-```
-
 ### Running without docker
 This repo has the following dependencies:
 * Python 2 / 3
@@ -47,6 +48,12 @@ This repo has the following dependencies:
 You can install the above dependencies manually, or use the following command:
 ```
 $ pip install numpy matplotlib scipy torch==1.4.0 opencv-python==4.2.0.32 cupy==6.7.0
+```
+
+ADDITIONAL REQUIREMENTS:
+```
+pip install future
+sudo apt-get install python-tk
 ```
 
 Our code has been tested on Ubuntu 18.04 and 16.04. An nvidia-driver and a Cuda version of 9.2/10.2 are required to run the code. 
