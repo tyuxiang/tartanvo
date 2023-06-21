@@ -65,7 +65,7 @@ class TartanVONode(object):
 
         self.pose_pub = rospy.Publisher("tartanvo_pose", PoseStamped, queue_size=10)
         self.odom_pub = rospy.Publisher("tartanvo_odom", Odometry, queue_size=10)
-        rospy.Subscriber('rgb_image', Image, self.handle_img)
+        rospy.Subscriber('rgb_image', Image, self.handle_img) # infinite queue size
         rospy.Subscriber('cam_info', CameraInfo, self.handle_caminfo)
         rospy.Subscriber('vo_scale', Float32, self.handle_scale)
 
@@ -100,7 +100,12 @@ class TartanVONode(object):
 
         if self.last_img is not None:
             pose_msg = PoseStamped()
-            pose_msg.header.stamp = msg.header.stamp
+            # pose_msg.header.stamp = msg.header.stamp
+            nanosecs = int(msg.header.frame_id[:-4])
+            pose_msg.header.stamp.secs = int(nanosecs/1e9)
+            pose_msg.header.stamp.nsecs = int((nanosecs/1e9 - int(nanosecs/1e9))*1e9)
+            # marcelprasetyo: add filename to the header
+            # pose_msg.header.frame_id = msg.header.frame_id
             pose_msg.header.frame_id = 'map'
             sample = {'img1': self.last_img, 
                       'img2': image_np, 
