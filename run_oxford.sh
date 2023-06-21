@@ -5,7 +5,7 @@
 
 
 # Run all the processes simultaneously
-roscore & python tartanvo_node.py & rosrun rviz rviz -d /home/marvl/Packages/tartanvo/$1.rviz & rosrun tf static_transform_publisher 0.0 0.0 0.0 0.0 0.0 0.0 map my_frame 100 & rosbag record tartanvo_pose -O /home/marvl/Implementation/testing-suite/Methods/tartanvo/results/$1/$2/$1-$2-$3.bag /topic __name:=my_bag & python publish_image_from_folder.py --base_img_folder /mnt/drive1/marvl/data/robotcar/2015-10-29-12-18-17/stereo/left_undistort --skipped_frames 37300 --rate 16 --dataset $1
+roscore & python tartanvo_node.py & rosrun rviz rviz -d /home/marvl/Packages/tartanvo/$1.rviz & rosrun tf static_transform_publisher 0.0 0.0 0.0 0.0 0.0 0.0 map my_frame 100 & rosbag record tartanvo_pose -O /home/marvl/Implementation/testing-suite/Results/tartanvo/$1/$2/raw_output/$3.bag /topic __name:=my_bag & python publish_image_from_folder.py --base_img_folder /mnt/drive1/marvl/data/robotcar/2015-10-29-12-18-17/stereo/left_undistort --skipped_frames 37300 --rate 16 --dataset $1
 
 # )
 # python publish_image_from_folder.py --base_img_folder /mnt/drive1/marvl/data/robotcar/2015-10-29-12-18-17/stereo/left_undistort --skipped_frames 1080 --rate 16 --dataset oxford
@@ -13,7 +13,7 @@ rosnode kill /my_bag
 sleep 2
 
 # Convert rosbag to csv
-cd /home/marvl/Implementation/testing-suite/Methods/tartanvo/results/$1/$2
+cd /home/marvl/Implementation/testing-suite/Results/tartanvo/$1/$2/raw_output
 rosrun rosbag_to_csv rosbag_to_csv.py
 # cd /home/marvl/Implementation/testing-suite/Methods/tartanvo
 

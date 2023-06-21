@@ -11,7 +11,19 @@
 3) Then it is unable to run cupy as cupy does not have attribute util under /Network/PWC/correlation.py:
    - change `@cupy.util.memoize` to `@cupy.memoize`
 
+4) If there is a as_dcm error, stackoverflow solution is that:
+```
+It seems that the method name has changed to from_matrix.
+
+In scipy.spatial.Rotation methods from_dcm, as_dcm were renamed to from_matrix, as_matrix respectively.
+```
+
 # Running
+```diff
+- Current issue:  have to manually select which file to convert from rosbag into csv. Thus, it is unable to automatically run multiple experiments consecutively
+- For evaluation, the csv has to be converted to a common output file and current evaluation code does not work because of the missing # at the first value of the first row
+```
+
 To run everything in a single command, where the first argument selects the dataset, second argument selects the sequence and the third argument specifies the experiment name:
 ```
 ./run_oxford.sh oxford 10-29 original
