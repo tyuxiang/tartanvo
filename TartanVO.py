@@ -48,16 +48,13 @@ class TartanVO(object):
             modelname = '/home/marvl/Packages/tartanvo/models/' + model_name
             self.load_model(self.vonet, modelname)
 
-        print("before cuda")
         self.vonet.cuda()
-        print("after cuda")
 
         self.test_count = 0
         self.pose_std = np.array([ 0.13,  0.13,  0.13,  0.013 ,  0.013,  0.013], dtype=np.float32) # the output scale factor
         self.flow_norm = 20 # scale factor for flow
 
     def load_model(self, model, modelname):
-        print("before torch load")
         preTrainDict = torch.load(modelname)
         # preTrainDict = torch.load(modelname, map_location='cpu')
         model_dict = model.state_dict()

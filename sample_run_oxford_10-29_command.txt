@@ -1,1 +1,0 @@
-./run_oxford.sh oxford 10-29 original
